@@ -41,24 +41,31 @@ namespace twozerofoureight
             switch (i)
             {
                 case 0:
-                    l.BackColor = Color.Gray;
+                    l.BackColor = Color.Moccasin;
                     break;
                 case 2:
-                    l.BackColor = Color.DarkGray;
+                    l.BackColor = Color.SandyBrown;
                     break;
                 case 4:
-                    l.BackColor = Color.Orange;
+                    l.BackColor = Color.Peru;
                     break;
                 case 8:
-                    l.BackColor = Color.Red;
+                    l.BackColor = Color.Orange;
+                    break;
+                case 16:
+                    l.BackColor = Color.DarkOrange;
+                    break;
+                case 32:
+                    l.BackColor = Color.Crimson;
                     break;
                 default:
-                    l.BackColor = Color.Green;
+                    l.BackColor = Color.Firebrick;
                     break;
             }
         }
         private void UpdateBoard(int[,] board)
         {
+            int sum = 0;
             UpdateTile(lbl00,board[0, 0]);
             UpdateTile(lbl01,board[0, 1]);
             UpdateTile(lbl02,board[0, 2]);
@@ -75,6 +82,21 @@ namespace twozerofoureight
             UpdateTile(lbl31,board[3, 1]);
             UpdateTile(lbl32,board[3, 2]);
             UpdateTile(lbl33,board[3, 3]);
+            for(int i = 0; i < 4; i++)
+            {
+                for(int j = 0; j < 4; j++)
+                {
+                    sum += board[i, j];
+                }
+            }
+            Score.Text = sum.ToString();
+            if (((TwoZeroFourEightModel)model).Boardfull(board))
+            {
+                if (!((TwoZeroFourEightModel)model).Moveable(board))
+                {
+                    MessageBox.Show("Game Over");
+                }
+            }
         }
 
         private void btnLeft_Click(object sender, EventArgs e)
@@ -97,5 +119,16 @@ namespace twozerofoureight
             controller.ActionPerformed(TwoZeroFourEightController.DOWN);
         }
 
+        private void ArrowKey(object sender, PreviewKeyDownEventArgs e)
+        {
+            e.IsInputKey = true;
+            switch (e.KeyCode)
+            {
+                case Keys.Up : controller.ActionPerformed(TwoZeroFourEightController.UP); break;
+                case Keys.Down : controller.ActionPerformed(TwoZeroFourEightController.DOWN); break;
+                case Keys.Left : controller.ActionPerformed(TwoZeroFourEightController.LEFT); break;
+                case Keys.Right : controller.ActionPerformed(TwoZeroFourEightController.RIGHT); break;
+            }
+        }
     }
 }
